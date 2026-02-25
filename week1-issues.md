@@ -101,4 +101,7 @@
 ## Week 1 DoD
 - [x] Redis/Kafka 포함 로컬 환경 재현 가능
 - [x] 이벤트 POC 동작 확인
-- [ ] 다음 주 성능 측정 계획(p95/TPS) 수립
+- [x] 다음 주 성능 측정 계획(p95/TPS) 수립
+
+DoD 산출물
+- `performance-plan-week2.md`

@@ -21,6 +21,7 @@ Scale & Async 역량 증명을 위한 이벤트 기반 주문/정산 POC 프로�
 - `infra-healthcheck.md`
 - `cache-policy.md`
 - `troubleshooting-log.md`
+- `performance-plan-week2.md`
 
 ## 3) Week 1 실행 순서
 1. 이벤트 시나리오 확정 (`event-scenario.md`)
@@ -53,7 +54,8 @@ Scale & Async 역량 증명을 위한 이벤트 기반 주문/정산 POC 프로�
 - 다음 주 성능 측정 계획(p95/TPS) 수립
 
 ## 7) 다음 단계
-- Week 1 DoD 남은 항목: 다음 주 성능 측정 계획(p95/TPS) 수립
+- Week 1 DoD 완료
+- 다음 단계: Week 2에서 `performance-plan-week2.md` 기반 성능 측정 실행
 
 ## 8) ISSUE-3 완료 결과
 - 산출물
