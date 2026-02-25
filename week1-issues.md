@@ -39,12 +39,23 @@
 ---
 
 ### ISSUE-3: Spring Boot 프로젝트 생성
-- [ ] Kotlin + Spring Boot 생성
-- [ ] Redis/Kafka 연동 의존성 추가
-- [ ] 환경변수 템플릿 정리
+- [x] Kotlin + Spring Boot 생성
+- [x] Redis/Kafka 연동 의존성 추가
+- [x] 환경변수 템플릿 정리
 
 완료 기준
 - 앱 기동 시 Redis/Kafka 접속 설정 로딩 확인
+
+산출물
+- `app/`
+- `app/src/main/resources/application.yml`
+- `app/.env.template`
+- `app/src/main/kotlin/com/sugowslt/ordersettlementasync/config/InfraProperties.kt`
+- `app/src/main/kotlin/com/sugowslt/ordersettlementasync/config/InfraPropertiesLoader.kt`
+
+검증 결과
+- `cd app && .\gradlew.bat test` 통과
+- `bootRun` 로그에서 `infra.config.loaded redisHost=localhost redisPort=6379 kafkaBootstrapServers=localhost:9092 consumerGroup=order-settlement-group serverPort=8080` 확인
 
 ---
 
@@ -67,6 +78,6 @@
 - 로컬에서 발행/소비 로그 확인
 
 ## Week 1 DoD
-- [ ] Redis/Kafka 포함 로컬 환경 재현 가능
+- [x] Redis/Kafka 포함 로컬 환경 재현 가능
 - [ ] 이벤트 POC 동작 확인
 - [ ] 다음 주 성능 측정 계획(p95/TPS) 수립

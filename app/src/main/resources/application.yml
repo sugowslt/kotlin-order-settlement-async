@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: order-settlement-async
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      timeout: ${REDIS_TIMEOUT:2s}
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: ${KAFKA_CONSUMER_GROUP:order-settlement-group}
+      auto-offset-reset: earliest
+    producer:
+      acks: all
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+
+server:
+  port: ${SERVER_PORT:8080}
+
+infra:
+  redis-host: ${REDIS_HOST:localhost}
+  redis-port: ${REDIS_PORT:6379}
+  kafka-bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+  consumer-group: ${KAFKA_CONSUMER_GROUP:order-settlement-group}

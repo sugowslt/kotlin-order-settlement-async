@@ -10,7 +10,8 @@ Scale & Async 역량 증명을 위한 이벤트 기반 주문/정산 POC 프로�
 ## 2) 현재 상태 (Week 1 시작)
 - ISSUE-1 완료: 이벤트 중심 시나리오 정의
 - ISSUE-2 완료: Docker 기반 인프라 세팅(MySQL/Redis/Kafka)
-- ISSUE-3~5 대기: 부트스트랩/캐시 설계/Kafka POC
+- ISSUE-3 완료: Spring Boot Kotlin 프로젝트 부트스트랩 + Redis/Kafka 설정 로딩 확인
+- ISSUE-4~5 대기: 캐시 설계/Kafka POC
 
 관련 문서:
 - `activity-plan.md`
@@ -49,4 +50,16 @@ Scale & Async 역량 증명을 위한 이벤트 기반 주문/정산 POC 프로�
 - 다음 주 성능 측정 계획(p95/TPS) 수립
 
 ## 7) 다음 단계
-- ISSUE-3: Spring Boot 프로젝트 생성부터 진행
+- ISSUE-4: 캐시 대상 API 설계
+
+## 8) ISSUE-3 완료 결과
+- 산출물
+	- `app/` (Spring Boot Kotlin 프로젝트)
+	- `app/src/main/resources/application.yml`
+	- `app/.env.template`
+	- `app/src/main/kotlin/com/sugowslt/ordersettlementasync/config/InfraProperties.kt`
+	- `app/src/main/kotlin/com/sugowslt/ordersettlementasync/config/InfraPropertiesLoader.kt`
+- 검증
+	- `cd app && .\gradlew.bat test` 통과
+	- `cd app && $env:REDIS_HOST='localhost'; $env:REDIS_PORT='6379'; $env:KAFKA_BOOTSTRAP_SERVERS='localhost:9092'; $env:KAFKA_CONSUMER_GROUP='order-settlement-group'; .\gradlew.bat bootRun`
+	- 부팅 로그 확인: `infra.config.loaded redisHost=localhost redisPort=6379 kafkaBootstrapServers=localhost:9092 consumerGroup=order-settlement-group serverPort=8080`
