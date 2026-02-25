@@ -32,8 +32,9 @@
 
 검증 결과
 - `docker compose up -d` 기동 확인
-- 포트 확인: 3307/6379/9092
+- 포트 확인: 3307/6379/9092 + 18080/18081/18082
 - 헬스체크: mysql(`mysqld is alive`), redis(`PONG`), kafka(topic list 명령 정상 실행)
+- 시각화 확인: Adminer/Redis Commander/Kafka UI 접속 가능
 
 ---
 

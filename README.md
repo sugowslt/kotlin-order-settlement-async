@@ -16,6 +16,7 @@ Scale & Async 역량 증명을 위한 이벤트 기반 주문/정산 POC 프로�
 - `activity-plan.md`
 - `week1-issues.md`
 - `event-scenario.md`
+- `infra-healthcheck.md`
 
 ## 3) Week 1 실행 순서
 1. 이벤트 시나리오 확정 (`event-scenario.md`)
@@ -34,10 +35,18 @@ Scale & Async 역량 증명을 위한 이벤트 기반 주문/정산 POC 프로�
 4. 헬스체크 명령
 	- 자세한 명령은 `infra-healthcheck.md` 참고
 
-## 5) 완료 기준 (Week 1 DoD)
+## 5) 시각화 확인 포인트
+- Adminer (MySQL UI): `http://localhost:18080`
+  - System: `MySQL`, Server: `project2-mysql`, User: `app`, Password: `app`, DB: `order_settlement`
+- Redis Commander (Redis UI): `http://localhost:18081`
+- Kafka UI: `http://localhost:18082`
+
+위 3개 화면으로 데이터/큐/토픽 상태를 시각적으로 확인할 수 있습니다.
+
+## 6) 완료 기준 (Week 1 DoD)
 - Redis/Kafka 포함 로컬 환경 재현 가능
 - 이벤트 발행/소비 로그 확인
 - 다음 주 성능 측정 계획(p95/TPS) 수립
 
-## 6) 다음 단계
+## 7) 다음 단계
 - ISSUE-3: Spring Boot 프로젝트 생성부터 진행
