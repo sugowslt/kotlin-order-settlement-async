@@ -20,6 +20,7 @@ Scale & Async 역량 증명을 위한 이벤트 기반 주문/정산 POC 프로�
 - `event-scenario.md`
 - `infra-healthcheck.md`
 - `cache-policy.md`
+- `troubleshooting-log.md`
 
 ## 3) Week 1 실행 순서
 1. 이벤트 시나리오 확정 (`event-scenario.md`)
@@ -75,3 +76,10 @@ Scale & Async 역량 증명을 위한 이벤트 기반 주문/정산 POC 프로�
 - 검증
 	- 정상 이벤트 발행 후 `kafka.publish.success`, `kafka.consume.success` 로그 확인
 	- `forceFail=true` 이벤트 발행 후 `kafka.consume.failed ... reason=forced consume failure` 로그 확인
+
+## 10) 오류 기록 원칙
+- 오류가 발생하고 해결된 경우 반드시 `troubleshooting-log.md`에 아래 3가지를 기록한다.
+	1. 오류 발생 원인
+	2. 해결 방법
+	3. 여러 방법 중 해당 방법을 선택한 이유
+- 기록 단위는 “증상 -> 원인 -> 시도한 해결 방법들 -> 최종 해결 -> 선택 이유 -> 재발 방지” 순서를 따른다.

@@ -51,3 +51,10 @@ docker exec project2-kafka /opt/kafka/bin/kafka-topics.sh --bootstrap-server loc
 ```powershell
 docker compose down
 ```
+
+## 9) 장애/오류 기록 확인
+- 오류 발생 및 해결 이력은 `troubleshooting-log.md`에서 확인한다.
+- 각 항목은 아래 기준으로 정리한다.
+	- 오류 발생 원인
+	- 해결 방법
+	- 여러 방법 중 해당 방법을 선택한 이유

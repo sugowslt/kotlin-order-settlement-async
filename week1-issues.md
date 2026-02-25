@@ -96,6 +96,7 @@
 - 발행 로그 확인: `kafka.publish.success ...`
 - 소비 로그 확인: `kafka.consume.success ...`
 - 실패 로그 확인: `kafka.consume.failed ... reason=forced consume failure`
+- 상세 트러블슈팅: `troubleshooting-log.md`
 
 ## Week 1 DoD
 - [x] Redis/Kafka 포함 로컬 환경 재현 가능
