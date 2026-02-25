@@ -53,6 +53,36 @@ services:
       timeout: 10s
       retries: 12
 
+  adminer:
+    image: adminer:4
+    container_name: project2-adminer
+    depends_on:
+      - mysql
+    ports:
+      - "18080:8080"
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: project2-redis-commander
+    depends_on:
+      - redis
+    environment:
+      REDIS_HOSTS: local:redis:6379
+    ports:
+      - "18081:8081"
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: project2-kafka-ui
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+      DYNAMIC_CONFIG_ENABLED: "true"
+    ports:
+      - "18082:8080"
+
 volumes:
   mysql_data:
   redis_data:
