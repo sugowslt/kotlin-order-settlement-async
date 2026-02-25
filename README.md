@@ -11,13 +11,15 @@ Scale & Async 역량 증명을 위한 이벤트 기반 주문/정산 POC 프로�
 - ISSUE-1 완료: 이벤트 중심 시나리오 정의
 - ISSUE-2 완료: Docker 기반 인프라 세팅(MySQL/Redis/Kafka)
 - ISSUE-3 완료: Spring Boot Kotlin 프로젝트 부트스트랩 + Redis/Kafka 설정 로딩 확인
-- ISSUE-4~5 대기: 캐시 설계/Kafka POC
+- ISSUE-4 완료: 캐시 대상 API/키 전략/무효화 트리거 정의
+- ISSUE-5 대기: Kafka POC
 
 관련 문서:
 - `activity-plan.md`
 - `week1-issues.md`
 - `event-scenario.md`
 - `infra-healthcheck.md`
+- `cache-policy.md`
 
 ## 3) Week 1 실행 순서
 1. 이벤트 시나리오 확정 (`event-scenario.md`)
@@ -50,7 +52,7 @@ Scale & Async 역량 증명을 위한 이벤트 기반 주문/정산 POC 프로�
 - 다음 주 성능 측정 계획(p95/TPS) 수립
 
 ## 7) 다음 단계
-- ISSUE-4: 캐시 대상 API 설계
+- ISSUE-5: Kafka POC(발행/구독)
 
 ## 8) ISSUE-3 완료 결과
 - 산출물
