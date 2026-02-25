@@ -78,14 +78,26 @@
 ---
 
 ### ISSUE-5: Kafka POC(발행/구독)
-- [ ] 이벤트 발행 코드 1개
-- [ ] 이벤트 수신 코드 1개
-- [ ] 소비 실패 로그 처리 1개
+- [x] 이벤트 발행 코드 1개
+- [x] 이벤트 수신 코드 1개
+- [x] 소비 실패 로그 처리 1개
 
 완료 기준
 - 로컬에서 발행/소비 로그 확인
 
+산출물
+- `app/src/main/kotlin/com/sugowslt/ordersettlementasync/api/OrderEventController.kt`
+- `app/src/main/kotlin/com/sugowslt/ordersettlementasync/kafka/OrderEventProducer.kt`
+- `app/src/main/kotlin/com/sugowslt/ordersettlementasync/kafka/OrderEventConsumer.kt`
+- `app/src/main/kotlin/com/sugowslt/ordersettlementasync/event/OrderCreatedEvent.kt`
+
+검증 결과
+- API 호출: `POST /api/v1/events/orders` (정상/강제실패 2건)
+- 발행 로그 확인: `kafka.publish.success ...`
+- 소비 로그 확인: `kafka.consume.success ...`
+- 실패 로그 확인: `kafka.consume.failed ... reason=forced consume failure`
+
 ## Week 1 DoD
 - [x] Redis/Kafka 포함 로컬 환경 재현 가능
-- [ ] 이벤트 POC 동작 확인
+- [x] 이벤트 POC 동작 확인
 - [ ] 다음 주 성능 측정 계획(p95/TPS) 수립

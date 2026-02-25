@@ -12,7 +12,7 @@ Scale & Async 역량 증명을 위한 이벤트 기반 주문/정산 POC 프로�
 - ISSUE-2 완료: Docker 기반 인프라 세팅(MySQL/Redis/Kafka)
 - ISSUE-3 완료: Spring Boot Kotlin 프로젝트 부트스트랩 + Redis/Kafka 설정 로딩 확인
 - ISSUE-4 완료: 캐시 대상 API/키 전략/무효화 트리거 정의
-- ISSUE-5 대기: Kafka POC
+- ISSUE-5 완료: Kafka 발행/구독 POC + 소비 실패 로그 처리
 
 관련 문서:
 - `activity-plan.md`
@@ -52,7 +52,7 @@ Scale & Async 역량 증명을 위한 이벤트 기반 주문/정산 POC 프로�
 - 다음 주 성능 측정 계획(p95/TPS) 수립
 
 ## 7) 다음 단계
-- ISSUE-5: Kafka POC(발행/구독)
+- Week 1 DoD 남은 항목: 다음 주 성능 측정 계획(p95/TPS) 수립
 
 ## 8) ISSUE-3 완료 결과
 - 산출물
@@ -65,3 +65,13 @@ Scale & Async 역량 증명을 위한 이벤트 기반 주문/정산 POC 프로�
 	- `cd app && .\gradlew.bat test` 통과
 	- `cd app && $env:REDIS_HOST='localhost'; $env:REDIS_PORT='6379'; $env:KAFKA_BOOTSTRAP_SERVERS='localhost:9092'; $env:KAFKA_CONSUMER_GROUP='order-settlement-group'; .\gradlew.bat bootRun`
 	- 부팅 로그 확인: `infra.config.loaded redisHost=localhost redisPort=6379 kafkaBootstrapServers=localhost:9092 consumerGroup=order-settlement-group serverPort=8080`
+
+## 9) ISSUE-5 완료 결과
+- 구현
+	- 이벤트 발행 API: `POST /api/v1/events/orders`
+	- 발행 컴포넌트: `OrderEventProducer`
+	- 수신 컴포넌트: `OrderEventConsumer`
+	- 이벤트 모델: `OrderCreatedEvent`
+- 검증
+	- 정상 이벤트 발행 후 `kafka.publish.success`, `kafka.consume.success` 로그 확인
+	- `forceFail=true` 이벤트 발행 후 `kafka.consume.failed ... reason=forced consume failure` 로그 확인
