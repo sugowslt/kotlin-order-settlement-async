@@ -19,12 +19,21 @@
 ---
 
 ### ISSUE-2: Docker 기반 인프라 세팅
-- [ ] MySQL/Redis/Kafka Compose 구성
-- [ ] 로컬 기동 및 포트 충돌 점검
-- [ ] 헬스체크 명령 정리
+- [x] MySQL/Redis/Kafka Compose 구성
+- [x] 로컬 기동 및 포트 충돌 점검
+- [x] 헬스체크 명령 정리
 
 완료 기준
 - 3개 컴포넌트 정상 기동 확인
+
+산출물
+- `docker-compose.yml`
+- `infra-healthcheck.md`
+
+검증 결과
+- `docker compose up -d` 기동 확인
+- 포트 확인: 3307/6379/9092
+- 헬스체크: mysql(`mysqld is alive`), redis(`PONG`), kafka(topic list 명령 정상 실행)
 
 ---
 

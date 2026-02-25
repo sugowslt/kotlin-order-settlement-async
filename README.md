@@ -9,7 +9,8 @@ Scale & Async 역량 증명을 위한 이벤트 기반 주문/정산 POC 프로�
 
 ## 2) 현재 상태 (Week 1 시작)
 - ISSUE-1 완료: 이벤트 중심 시나리오 정의
-- ISSUE-2~5 대기: 인프라/부트스트랩/캐시 설계/Kafka POC
+- ISSUE-2 완료: Docker 기반 인프라 세팅(MySQL/Redis/Kafka)
+- ISSUE-3~5 대기: 부트스트랩/캐시 설계/Kafka POC
 
 관련 문서:
 - `activity-plan.md`
@@ -23,10 +24,20 @@ Scale & Async 역량 증명을 위한 이벤트 기반 주문/정산 POC 프로�
 4. 캐시 대상 API/무효화 정책 정의
 5. Kafka 발행/구독 POC 구현
 
-## 4) 완료 기준 (Week 1 DoD)
+## 4) 인프라 실행 가이드 (ISSUE-2)
+1. 인프라 기동
+	- `docker compose up -d`
+2. 상태 확인
+	- `docker compose ps`
+3. 포트 점검
+	- MySQL: `3307`, Redis: `6379`, Kafka: `9092`
+4. 헬스체크 명령
+	- 자세한 명령은 `infra-healthcheck.md` 참고
+
+## 5) 완료 기준 (Week 1 DoD)
 - Redis/Kafka 포함 로컬 환경 재현 가능
 - 이벤트 발행/소비 로그 확인
 - 다음 주 성능 측정 계획(p95/TPS) 수립
 
-## 5) 다음 단계
-- ISSUE-2: Docker 기반 인프라 세팅부터 진행
+## 6) 다음 단계
+- ISSUE-3: Spring Boot 프로젝트 생성부터 진행
