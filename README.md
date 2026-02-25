@@ -83,3 +83,28 @@ Scale & Async 역량 증명을 위한 이벤트 기반 주문/정산 POC 프로�
 	2. 해결 방법
 	3. 여러 방법 중 해당 방법을 선택한 이유
 - 기록 단위는 “증상 -> 원인 -> 시도한 해결 방법들 -> 최종 해결 -> 선택 이유 -> 재발 방지” 순서를 따른다.
+- 오류를 닫을 때는 `troubleshooting-log.md` 상세 기록 + `README.md` 요약 기록을 **항상 함께** 업데이트한다.
+
+## 11) 트러블슈팅 기록 요약 (필수)
+- 2026-02-25 / `gradlew.bat` 인식 실패
+	- 원인: 실행 경로가 `app`이 아니어서 wrapper 파일 탐색 실패
+	- 해결: `-p c:\backendgo\project2\app`로 Gradle 프로젝트 경로 명시
+	- 선택 이유: 터미널 cwd 의존성을 제거해 재현성과 자동화 안정성이 높음
+- 2026-02-25 / Kafka Consumer 시작 실패 (`NoClassDefFoundError: ... JavaType`)
+	- 원인: Kafka JSON 역직렬화에 필요한 Jackson 런타임 클래스 누락
+	- 해결: `build.gradle.kts`에 `jackson-databind` 추가
+	- 선택 이유: 원인에 직접 대응하는 최소 변경
+- 2026-02-25 / Producer 직렬화 실패 (`InvalidDefinitionException`)
+	- 원인: 이벤트 시간 타입(`Instant`) 직렬화 충돌
+	- 해결: `occurredAt`을 ISO-8601 문자열로 전환
+	- 선택 이유: POC 단계에서 설정 복잡도 대비 안정성/호환성이 가장 높음
+- 2026-02-25 / Consumer 역직렬화 루프 (`RecordDeserializationException`)
+	- 원인: JsonDeserializer 설정/토픽 레코드 포맷 불일치
+	- 해결: Kafka value를 `String`으로 통일하고 Consumer 내부에서 수동 파싱
+	- 선택 이유: 오류 지점을 애플리케이션 코드에서 제어 가능하고 실패 로그 처리 단순화
+- 2026-02-25 / `ObjectMapper` 빈 주입 실패
+	- 원인: 기대한 자동 빈 구성이 현재 구조와 불일치
+	- 해결: Producer/Consumer 내부 로컬 매퍼(`jacksonObjectMapper()`) 사용
+	- 선택 이유: 전역 설정 추가 없이 국소 수정으로 빠르게 안정화 가능
+
+상세 로그는 `troubleshooting-log.md` 참고.
