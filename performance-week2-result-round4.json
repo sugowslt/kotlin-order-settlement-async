@@ -1,0 +1,38 @@
+﻿[
+    {
+        "step":  "S4",
+        "seconds":  90,
+        "concurrency":  150,
+        "targetRps":  1200,
+        "requests":  108000,
+        "errors":  0,
+        "errorRate":  0,
+        "avgMs":  2.32,
+        "p95Ms":  1.34,
+        "tps":  1200
+    },
+    {
+        "step":  "S5",
+        "seconds":  90,
+        "concurrency":  180,
+        "targetRps":  1500,
+        "requests":  135000,
+        "errors":  0,
+        "errorRate":  0,
+        "avgMs":  2.92,
+        "p95Ms":  1.46,
+        "tps":  1500
+    },
+    {
+        "step":  "S6",
+        "seconds":  90,
+        "concurrency":  220,
+        "targetRps":  1800,
+        "requests":  162000,
+        "errors":  0,
+        "errorRate":  0,
+        "avgMs":  6.85,
+        "p95Ms":  3.47,
+        "tps":  1800
+    }
+]
