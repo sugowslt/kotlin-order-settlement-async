@@ -55,8 +55,8 @@ Scale & Async 역량 증명을 위한 이벤트 기반 주문/정산 POC 프로�
 
 ## 7) 다음 단계
 - Week 1 DoD 완료
-- Week 2 성능 실측 1차 완료
-- 다음 단계: 개선안 적용 후 2차 측정(전/후 비교)
+- Week 2 성능 실측 1차/2차 완료
+- 다음 단계: 개선안 후보 추가 발굴 및 3차 실측(병목 구간 집중)
 
 ## 8) ISSUE-3 완료 결과
 - 산출물
@@ -127,3 +127,17 @@ Scale & Async 역량 증명을 위한 이벤트 기반 주문/정산 POC 프로�
 	- p95 <= 200ms: 충족
 	- TPS >= 100 req/s: 충족
 	- Error rate <= 1%: 충족
+
+## 13) Week2 성능 실측 2차 결과 (개선안 적용)
+- 개선안
+	- Kafka hot path 경량화(무제한 성공 로그 제거 + 샘플링 로그)
+	- Consumer에서 force-fail 판단 시 불필요한 전량 역직렬화 회피
+- 결과 파일
+	- 2차: `performance-week2-result-round2.json`
+- 요약
+	- A: avg 1.01ms / p95 1.30ms / TPS 120 / Error 0.00%
+	- B: avg 1.17ms / p95 1.34ms / TPS 300 / Error 0.00%
+	- C: avg 1.08ms / p95 1.38ms / TPS 200 / Error 0.00%
+- 1차 대비
+	- A/C는 p95 소폭 개선, B는 동일 수준 유지
+	- 모든 시나리오에서 목표 기준(p95/TPS/Error rate) 지속 충족

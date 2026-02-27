@@ -2,17 +2,26 @@ package com.sugowslt.ordersettlementasync.kafka
 
 import com.sugowslt.ordersettlementasync.event.OrderCreatedEvent
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.kafka.support.KafkaHeaders
 import org.springframework.messaging.handler.annotation.Header
 import org.springframework.stereotype.Component
 import tools.jackson.module.kotlin.jacksonObjectMapper
+import java.util.concurrent.atomic.AtomicLong
 
 @Component
-class OrderEventConsumer {
+class OrderEventConsumer(
+	@Value("\${app.kafka.metrics.log-every:1000}") private val logEvery: Long,
+) {
 
 	private val logger = LoggerFactory.getLogger(OrderEventConsumer::class.java)
 	private val objectMapper = jacksonObjectMapper()
+	private val successCounter = AtomicLong(0)
+
+	private fun payloadContainsForceFail(payload: String): Boolean {
+		return payload.contains("\"forceFail\":true")
+	}
 
 	@KafkaListener(topics = ["\${app.kafka.topics.order-created}"])
 	fun consumeOrderCreated(
@@ -21,26 +30,27 @@ class OrderEventConsumer {
 		@Header(KafkaHeaders.RECEIVED_KEY, required = false) key: String?,
 	) {
 		runCatching {
-			val event = objectMapper.readValue(payload, OrderCreatedEvent::class.java)
-
-			if (event.forceFail) {
+			if (payloadContainsForceFail(payload)) {
 				throw IllegalStateException("forced consume failure")
 			}
 
-			logger.info(
-				"kafka.consume.success topic={} key={} eventId={} orderId={} traceId={}",
-				topic,
-				key,
-				event.eventId,
-				event.orderId,
-				event.traceId,
-			)
+			val count = successCounter.incrementAndGet()
+			if (count % logEvery == 0L) {
+				logger.info(
+					"kafka.consume.success.sampled count={} topic={} lastKey={}",
+					count,
+					topic,
+					key,
+				)
+			}
 		}.onFailure {
+			val event = runCatching { objectMapper.readValue(payload, OrderCreatedEvent::class.java) }.getOrNull()
 			logger.error(
-				"kafka.consume.failed topic={} key={} payload={} reason={}",
+				"kafka.consume.failed topic={} key={} eventId={} orderId={} reason={}",
 				topic,
 				key,
-				payload,
+				event?.eventId ?: "unknown",
+				event?.orderId ?: -1,
 				it.message,
 				it,
 			)

@@ -37,3 +37,5 @@ app:
   kafka:
     topics:
       order-created: ${KAFKA_TOPIC_ORDER_CREATED:order-created.v1}
+    metrics:
+      log-every: ${KAFKA_LOG_EVERY:1000}
