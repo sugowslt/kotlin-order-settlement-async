@@ -55,7 +55,8 @@ Scale & Async 역량 증명을 위한 이벤트 기반 주문/정산 POC 프로�
 
 ## 7) 다음 단계
 - Week 1 DoD 완료
-- 다음 단계: Week 2에서 `performance-plan-week2.md` 기반 성능 측정 실행
+- Week 2 성능 실측 1차 완료
+- 다음 단계: 개선안 적용 후 2차 측정(전/후 비교)
 
 ## 8) ISSUE-3 완료 결과
 - 산출물
@@ -108,5 +109,21 @@ Scale & Async 역량 증명을 위한 이벤트 기반 주문/정산 POC 프로�
 	- 원인: 기대한 자동 빈 구성이 현재 구조와 불일치
 	- 해결: Producer/Consumer 내부 로컬 매퍼(`jacksonObjectMapper()`) 사용
 	- 선택 이유: 전역 설정 추가 없이 국소 수정으로 빠르게 안정화 가능
+- 2026-02-27 / Week2 성능 측정 중 C 시나리오 100% 타임아웃
+	- 원인: 시간기반 무한 전송 스크립트가 고부하 구간에서 요청을 과도하게 밀어 넣어 앱 소켓/스레드 적체를 유발
+	- 해결: `scripts/run-week2-loadtest.ps1`를 고정 요청 수 + worker pacing + 시나리오 간 cooldown 구조로 변경
+	- 선택 이유: 같은 인프라에서 재현성과 안정성을 동시에 확보하면서도 p95/TPS 지표 비교가 가능한 방식이기 때문
 
 상세 로그는 `troubleshooting-log.md` 참고.
+
+## 12) Week2 성능 실측 결과 (2026-02-27)
+- 기준 문서: `performance-plan-week2.md`
+- 결과 파일: `performance-week2-result.json`
+- 요약
+	- Scenario A: avg 1.15ms / p95 1.52ms / TPS 120 / Error 0.00%
+	- Scenario B: avg 1.16ms / p95 1.33ms / TPS 300 / Error 0.00%
+	- Scenario C: avg 1.22ms / p95 1.45ms / TPS 200 / Error 0.00%
+- 목표 대비
+	- p95 <= 200ms: 충족
+	- TPS >= 100 req/s: 충족
+	- Error rate <= 1%: 충족
