@@ -1,0 +1,38 @@
+﻿[
+    {
+        "step":  "S1",
+        "seconds":  90,
+        "concurrency":  80,
+        "targetRps":  500,
+        "requests":  45000,
+        "errors":  0,
+        "errorRate":  0,
+        "avgMs":  2.11,
+        "p95Ms":  1.34,
+        "tps":  500
+    },
+    {
+        "step":  "S2",
+        "seconds":  90,
+        "concurrency":  100,
+        "targetRps":  700,
+        "requests":  63000,
+        "errors":  0,
+        "errorRate":  0,
+        "avgMs":  2.31,
+        "p95Ms":  1.41,
+        "tps":  700
+    },
+    {
+        "step":  "S3",
+        "seconds":  90,
+        "concurrency":  120,
+        "targetRps":  900,
+        "requests":  81000,
+        "errors":  0,
+        "errorRate":  0,
+        "avgMs":  2.37,
+        "p95Ms":  1.35,
+        "tps":  900
+    }
+]
