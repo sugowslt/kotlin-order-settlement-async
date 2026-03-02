@@ -148,6 +148,29 @@
 - 목표 지표(p95/TPS/Error rate)는 전 구간 충족.
 - project2 1차 성능 검증 목표는 완료로 판단.
 
+## 8-7) 옵션 심화 실험 (Kafka ACK x Partition, 2026-03-02)
+
+실험 조건
+- 부하 시나리오: 60초 / 동시성 100 / 목표 900 RPS
+- 비교 축: `acks=1|all` x `partition=1|3`
+- 실행 스크립트: `scripts/run-kafka-ack-partition-quick.ps1`
+
+| Combo | Avg(ms) | p95(ms) | TPS | Error Rate | Result File |
+|---|---:|---:|---:|---:|---|
+| ack1/p1 | 3.67 | 1.95 | 900 | 0.00% | `performance-week2-kafka-ack1-p1.json` |
+| all/p1 | 3.35 | 1.78 | 900 | 0.00% | `performance-week2-kafka-all-p1.json` |
+| ack1/p3 | 4.14 | 2.17 | 900 | 0.00% | `performance-week2-kafka-ack1-p3.json` |
+| all/p3 | 3.33 | 1.86 | 900 | 0.00% | `performance-week2-kafka-all-p3.json` |
+
+해석
+- 4개 조합 모두 동일 TPS와 Error 0.00%를 유지해 안정성 기준을 충족.
+- 본 실험(단일 브로커/로컬 환경)에서는 `acks=all` 조합이 avg/p95 지표에서 소폭 우세.
+- 파티션 3개 조합은 분산 효과 대비 단일 브로커 오버헤드 영향으로 avg가 다소 증가.
+
+## 8-8) 최종 결론 (project2)
+- Week1(기능), Week2(1~4차 실측), 옵션 심화 실험(ACK x Partition)까지 완료.
+- 필수 범위 + 옵션 범위가 모두 종료되어 project2는 최종 완료 상태로 판단.
+
 ## 9) 리스크 및 대응
 - 로컬 머신 상태 변동으로 결과 편차 발생 가능
   - 대응: 각 시나리오 2~3회 반복, 중앙값/범위 함께 기록

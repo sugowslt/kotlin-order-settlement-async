@@ -59,7 +59,8 @@ Scale & Async 역량 증명을 위한 이벤트 기반 주문/정산 POC 프로�
 - Week 2 성능 실측 3차(병목 구간 집중) 완료
 - Week 2 성능 실측 4차(1200+ RPS 확장) 완료
 - project2 1차 목표(기능 + 성능 검증) 완료
-- 다음 단계(옵션): Kafka 파티션/ACK 조건 비교 심화 실험
+- Kafka 파티션/ACK 조건 비교 심화 실험 완료
+- project2 최종 종료(필수 + 옵션 범위 완료)
 
 ## 8) ISSUE-3 완료 결과
 - 산출물
@@ -172,3 +173,24 @@ Scale & Async 역량 증명을 위한 이벤트 기반 주문/정산 POC 프로�
 - 결론
 	- 1800 RPS까지 목표 기준(p95 <= 200ms, Error <= 1%) 안정 충족
 	- project2 1차 성능 검증 범위 완료
+
+## 16) Week2 옵션 심화 실험 결과 (Kafka ACK x Partition)
+- 실행 일시
+	- 2026-03-02
+- 실행 방식
+	- 동일 부하 조건: 60초 / 동시성 100 / 목표 900 RPS
+	- 비교 조합: `acks=1|all` x `partition=1|3`
+- 결과 파일
+	- `performance-week2-kafka-ack1-p1.json`
+	- `performance-week2-kafka-all-p1.json`
+	- `performance-week2-kafka-ack1-p3.json`
+	- `performance-week2-kafka-all-p3.json`
+- 요약
+	- ack1/p1: avg 3.67ms / p95 1.95ms / Error 0.00%
+	- all/p1: avg 3.35ms / p95 1.78ms / Error 0.00%
+	- ack1/p3: avg 4.14ms / p95 2.17ms / Error 0.00%
+	- all/p3: avg 3.33ms / p95 1.86ms / Error 0.00%
+- 결론
+	- 네 조합 모두 Error 0.00%로 안정성 목표를 유지
+	- 본 로컬 단일 브로커 환경에서는 `acks=all` 조합이 avg/p95가 소폭 우세
+	- project2의 옵션 심화 검증까지 완료되어 최종 종료 기준 충족

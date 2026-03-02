@@ -1,0 +1,12 @@
+﻿{
+    "label":  "all_p1",
+    "seconds":  60,
+    "concurrency":  100,
+    "targetRps":  900,
+    "requests":  54000,
+    "errors":  0,
+    "errorRate":  0,
+    "avgMs":  3.35,
+    "p95Ms":  1.78,
+    "tps":  900
+}

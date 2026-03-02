@@ -1,0 +1,12 @@
+﻿{
+    "label":  "ack1_p3",
+    "seconds":  60,
+    "concurrency":  100,
+    "targetRps":  900,
+    "requests":  54000,
+    "errors":  0,
+    "errorRate":  0,
+    "avgMs":  4.14,
+    "p95Ms":  2.17,
+    "tps":  900
+}
