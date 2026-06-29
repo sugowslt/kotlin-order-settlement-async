@@ -110,6 +110,9 @@ $env:KAFKA_CONSUMER_GROUP='order-settlement-group'
 - `infra-healthcheck.md`
 - `performance-plan-week2.md`
 - `week1-issues.md`
+- `week3-alert-tuning-notes.md`
+- `week4-drill-result.md`
+- `week4-operations-report.md`
 
 ## 현재 상태
 - 목표 범위 완료
