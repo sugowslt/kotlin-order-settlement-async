@@ -16,17 +16,13 @@ spring:
     consumer:
       group-id: ${KAFKA_CONSUMER_GROUP:order-settlement-group}
       auto-offset-reset: earliest
+      concurrency: 2
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     producer:
       acks: all
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
-
-  # 운영 환경에서는 JSON 로그 출력을 고려하세요.
-  jackson:
-    serialization:
-      indent-output: true
 
 management:
   endpoints:
