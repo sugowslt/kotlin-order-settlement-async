@@ -12,48 +12,52 @@ import java.util.concurrent.atomic.AtomicLong
 
 @Component
 class OrderEventConsumer(
-	@Value("\${app.kafka.metrics.log-every:1000}") private val logEvery: Long,
+    @Value("\${app.kafka.metrics.log-every:1000}") private val logEvery: Long,
 ) {
 
-	private val logger = LoggerFactory.getLogger(OrderEventConsumer::class.java)
-	private val objectMapper = jacksonObjectMapper()
-	private val successCounter = AtomicLong(0)
+    private val logger = LoggerFactory.getLogger(OrderEventConsumer::class.java)
+    private val objectMapper = jacksonObjectMapper()
+    private val successCounter = AtomicLong(0)
 
-	private fun payloadContainsForceFail(payload: String): Boolean {
-		return payload.contains("\"forceFail\":true")
-	}
+    private fun payloadContainsForceFail(payload: String): Boolean {
+        return payload.contains("\"forceFail\":true")
+    }
 
-	@KafkaListener(topics = ["\${app.kafka.topics.order-created}"])
-	fun consumeOrderCreated(
-		payload: String,
-		@Header(KafkaHeaders.RECEIVED_TOPIC) topic: String,
-		@Header(KafkaHeaders.RECEIVED_KEY, required = false) key: String?,
-	) {
-		runCatching {
-			if (payloadContainsForceFail(payload)) {
-				throw IllegalStateException("forced consume failure")
-			}
+    @KafkaListener(
+        topics = ["\${app.kafka.topics.order-created}"],
+        containerFactory = "kafkaListenerContainerFactory",
+    )
+    fun consumeOrderCreated(
+        payload: String,
+        @Header(KafkaHeaders.RECEIVED_TOPIC) topic: String,
+        @Header(KafkaHeaders.RECEIVED_KEY, required = false) key: String?,
+    ) {
+        runCatching {
+            if (payloadContainsForceFail(payload)) {
+                throw IllegalStateException("forced consume failure")
+            }
 
-			val count = successCounter.incrementAndGet()
-			if (count % logEvery == 0L) {
-				logger.info(
-					"kafka.consume.success.sampled count={} topic={} lastKey={}",
-					count,
-					topic,
-					key,
-				)
-			}
-		}.onFailure {
-			val event = runCatching { objectMapper.readValue(payload, OrderCreatedEvent::class.java) }.getOrNull()
-			logger.error(
-				"kafka.consume.failed topic={} key={} eventId={} orderId={} reason={}",
-				topic,
-				key,
-				event?.eventId ?: "unknown",
-				event?.orderId ?: -1,
-				it.message,
-				it,
-			)
-		}
-	}
+            val count = successCounter.incrementAndGet()
+            if (count % logEvery == 0L) {
+                logger.info(
+                    "kafka.consume.success.sampled count={} topic={} lastKey={}",
+                    count,
+                    topic,
+                    key,
+                )
+            }
+        }.onFailure {
+            val event = runCatching { objectMapper.readValue(payload, OrderCreatedEvent::class.java) }.getOrNull()
+            logger.error(
+                "kafka.consume.failed topic={} key={} eventId={} orderId={} reason={}",
+                topic,
+                key,
+                event?.eventId ?: "unknown",
+                event?.orderId ?: -1,
+                it.message,
+                it,
+            )
+            throw it
+        }
+    }
 }
