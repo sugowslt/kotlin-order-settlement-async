@@ -31,7 +31,10 @@ class OrderEventConsumer(
         payload: String,
         @Header(KafkaHeaders.RECEIVED_TOPIC) topic: String,
         @Header(KafkaHeaders.RECEIVED_KEY, required = false) key: String?,
+        @Header(name = "X-Trace-Id", required = false) traceId: String?,
     ) {
+        val safeTraceId = traceId ?: "unknown"
+
         runCatching {
             if (payloadContainsForceFail(payload)) {
                 throw IllegalStateException("forced consume failure")
@@ -40,7 +43,8 @@ class OrderEventConsumer(
             val count = successCounter.incrementAndGet()
             if (count % logEvery == 0L) {
                 logger.info(
-                    "kafka.consume.success.sampled count={} topic={} lastKey={}",
+                    "kafka.consume.success.sampled traceId={} count={} topic={} lastKey={}",
+                    safeTraceId,
                     count,
                     topic,
                     key,
@@ -49,7 +53,8 @@ class OrderEventConsumer(
         }.onFailure {
             val event = runCatching { objectMapper.readValue(payload, OrderCreatedEvent::class.java) }.getOrNull()
             logger.error(
-                "kafka.consume.failed topic={} key={} eventId={} orderId={} reason={}",
+                "kafka.consume.failed traceId={} topic={} key={} eventId={} orderId={} reason={}",
+                safeTraceId,
                 topic,
                 key,
                 event?.eventId ?: "unknown",

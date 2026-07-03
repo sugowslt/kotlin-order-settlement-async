@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>order-settlement-async viewer</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<style>
+  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 0; padding: 24px; background: #0b0f14; color: #e6e9ef; }
+  h1 { font-size: 18px; margin: 0 0 12px; }
+  h2 { font-size: 14px; margin: 24px 0 8px; color: #8b93a1; text-transform: uppercase; letter-spacing: .08em; }
+  .card { background: #11161d; border: 1px solid #1d2530; border-radius: 12px; padding: 16px; }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+  .muted { color: #8b93a1; }
+</style>
+</head>
+<body>
+<h1>kotlin-order-settlement-async — 시스템 개요</h1>
+<p class="muted">로컬 Docker Compose: MySQL, Redis, Kafka, Kafka UI. Kafka 기반 비동기 정산.</p>
+
+<h2>시퀀스</h2>
+<div class="card mono" style="font-size:12px;white-space:pre-wrap;">
+API
+ -> POST /events/order-created
+ -> OrderEventProducer.publish(event)
+     topic: app.kafka.topics.order-created
+     header: X-Trace-Id = event.traceId
+ -> Kafka(order-created)
+ -> OrderEventConsumer.consumeOrderCreated(payload, topic, key, traceId)
+</div>
+
+<h2>성능 비교</h2>
+<div class="card">
+  <canvas id="perf"></canvas>
+</div>
+
+<h2>엔드포인트</h2>
+<div class="card mono" style="font-size:12px;">
+POST /events/order-created<br/>
+GET  /actuator/health
+</div>
+
+<script>
+new Chart(document.getElementById('perf'), {
+  type: 'bar',
+  data: {
+    labels: ['run-1','run-2','run-3','run-4'],
+    datasets: [
+      { label: 'throughput msg/s', data: [1120,1310,1580,1800], backgroundColor: '#2563eb' },
+      { label: 'error count', data: [0,0,0,0], backgroundColor: '#ef4444' }
+    ]
+  },
+  options: { plugins: { legend: { labels: { color: '#e6e9ef' } } }, scales: { y: { ticks: { color: '#8b93a1' } }, x: { ticks: { color: '#e6e9ef' } } } }
+});
+</script>
+</body>
+</html>
