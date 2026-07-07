@@ -14,4 +14,4 @@ jobs:
           distribution: temurin
           java-version: 17
           cache: gradle
-      - run: cd app && ./gradlew build -x test
+      - run: cd app && ./gradlew build -x test --warning-mode none
