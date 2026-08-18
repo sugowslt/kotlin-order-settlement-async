@@ -1,6 +1,5 @@
 package com.sugowslt.ordersettlementasync.kafka
 
-import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -20,6 +19,8 @@ class KafkaConfig {
     @Bean
     fun kafkaListenerContainerFactory(consumerFactory: ConsumerFactory<String, String>): ConcurrentKafkaListenerContainerFactory<String, String> {
         val factory = ConcurrentKafkaListenerContainerFactory<String, String>()
+        factory.setConsumerFactory(consumerFactory)
+        factory.setConcurrency(concurrency)
         factory.setCommonErrorHandler(errorHandler())
         return factory
     }

@@ -16,9 +16,10 @@ spring:
     consumer:
       group-id: ${KAFKA_CONSUMER_GROUP:order-settlement-group}
       auto-offset-reset: earliest
-      concurrency: 2
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      concurrency: ${KAFKA_CONSUMER_CONCURRENCY:2}
     producer:
       acks: all
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -39,3 +40,9 @@ app:
       order-created: ${KAFKA_TOPIC_ORDER_CREATED:order-created.v1}
     metrics:
       log-every: ${KAFKA_LOG_EVERY:1000}
+
+infra:
+  redis-host: ${REDIS_HOST:localhost}
+  redis-port: ${REDIS_PORT:6379}
+  kafka-bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+  consumer-group: ${KAFKA_CONSUMER_GROUP:order-settlement-group}
