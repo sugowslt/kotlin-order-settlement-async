@@ -1,6 +1,8 @@
 package com.sugowslt.ordersettlementasync.kafka
 
 import com.sugowslt.ordersettlementasync.event.OrderCreatedEvent
+import com.sugowslt.ordersettlementasync.settlement.SettlementProcessResult
+import com.sugowslt.ordersettlementasync.settlement.SettlementProcessor
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import tools.jackson.module.kotlin.jacksonObjectMapper
@@ -9,7 +11,12 @@ import kotlin.test.assertFailsWith
 
 class OrderEventConsumerTest {
     private val mapper = jacksonObjectMapper()
-    private val consumer = OrderEventConsumer(logEvery = 1_000)
+    private val processedEvents = mutableListOf<OrderCreatedEvent>()
+    private val processor = SettlementProcessor { event ->
+        processedEvents += event
+        SettlementProcessResult.CREATED
+    }
+    private val consumer = OrderEventConsumer(logEvery = 1_000, settlementProcessor = processor)
 
     @Test
     fun `정상 payload는 forceFail가 false라 성공한다`() {
@@ -21,6 +28,8 @@ class OrderEventConsumerTest {
             key = "order:1001",
             traceId = "trace-1",
         )
+
+        assertThat(processedEvents.single().eventId).isEqualTo("evt-1")
     }
 
     @Test
@@ -37,6 +46,8 @@ class OrderEventConsumerTest {
                 traceId = "trace-2",
             )
         }
+
+        assertThat(processedEvents).isEmpty()
     }
 
     @Test

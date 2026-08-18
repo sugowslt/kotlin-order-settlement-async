@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: ${DB_DRIVER_CLASS:com.mysql.cj.jdbc.Driver}
+  jpa:
+    database-platform: ${JPA_DIALECT:org.hibernate.dialect.MySQLDialect}
+  flyway:
+    locations: ${SPRING_FLYWAY_LOCATIONS:classpath:db/migration/mysql}

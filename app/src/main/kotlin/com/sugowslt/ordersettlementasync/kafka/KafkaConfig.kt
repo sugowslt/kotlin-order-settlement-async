@@ -11,10 +11,9 @@ import org.springframework.util.backoff.ExponentialBackOff
 import java.time.Duration
 
 @Configuration
-class KafkaConfig {
-
-    @Value("\${spring.kafka.listener.concurrency:2}")
-    private val concurrency: Int = 2
+class KafkaConfig(
+    @Value("\${spring.kafka.listener.concurrency:2}") private val concurrency: Int,
+) {
 
     @Bean
     fun kafkaListenerContainerFactory(consumerFactory: ConsumerFactory<String, String>): ConcurrentKafkaListenerContainerFactory<String, String> {
