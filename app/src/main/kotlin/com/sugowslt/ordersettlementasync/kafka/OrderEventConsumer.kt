@@ -38,12 +38,11 @@ class OrderEventConsumer(
         payload: String,
         @Header(KafkaHeaders.RECEIVED_TOPIC) topic: String,
         @Header(KafkaHeaders.RECEIVED_KEY, required = false) key: String?,
-        @Header(name = "X-Trace-Id", required = false) traceId: String?,
+        @Header(name = TRACE_ID_HEADER, required = false) traceId: String?,
     ) {
-        val safeTraceId = traceId ?: "unknown"
-
         runCatching {
-            val event = objectMapper.readValue(payload, OrderCreatedEvent::class.java)
+            val event = deserialize(payload)
+            val resolvedTraceId = traceId ?: event.traceId
             if (event.forceFail) {
                 throw IllegalStateException("forced consume failure")
             }
@@ -52,7 +51,7 @@ class OrderEventConsumer(
             if (processResult == SettlementProcessResult.DUPLICATE) {
                 logger.info(
                     "kafka.consume.duplicate traceId={} topic={} key={} eventId={} orderId={}",
-                    safeTraceId,
+                    resolvedTraceId,
                     topic,
                     key,
                     event.eventId,
@@ -65,17 +64,18 @@ class OrderEventConsumer(
             if (count % logEvery == 0L) {
                 logger.info(
                     "kafka.consume.success.sampled traceId={} count={} topic={} lastKey={}",
-                    safeTraceId,
+                    resolvedTraceId,
                     count,
                     topic,
                     key,
                 )
             }
         }.onFailure {
-            val event = runCatching { objectMapper.readValue(payload, OrderCreatedEvent::class.java) }.getOrNull()
+            val event = runCatching { deserialize(payload) }.getOrNull()
+            val resolvedTraceId = traceId ?: event?.traceId ?: "unknown"
             logger.error(
                 "kafka.consume.failed traceId={} topic={} key={} eventId={} orderId={} reason={}",
-                safeTraceId,
+                resolvedTraceId,
                 topic,
                 key,
                 event?.eventId ?: "unknown",
@@ -86,4 +86,12 @@ class OrderEventConsumer(
             throw it
         }
     }
+
+    private fun deserialize(payload: String): OrderCreatedEvent = try {
+        objectMapper.readValue(payload, OrderCreatedEvent::class.java)
+    } catch (exception: Exception) {
+        throw InvalidOrderEventException("invalid order-created event payload", exception)
+    }
 }
+
+class InvalidOrderEventException(message: String, cause: Throwable) : IllegalArgumentException(message, cause)

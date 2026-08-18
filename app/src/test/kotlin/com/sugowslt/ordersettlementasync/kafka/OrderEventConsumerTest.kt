@@ -51,6 +51,20 @@ class OrderEventConsumerTest {
     }
 
     @Test
+    fun `잘못된 JSON은 재시도하지 않는 이벤트 오류로 변환한다`() {
+        assertFailsWith<InvalidOrderEventException> {
+            consumer.consumeOrderCreated(
+                payload = "{not-json}",
+                topic = "order-created.v1",
+                key = "order:1001",
+                traceId = "trace-invalid",
+            )
+        }
+
+        assertThat(processedEvents).isEmpty()
+    }
+
+    @Test
     fun `JSON 파싱이 정상 동작한다`() {
         val event = orderCreatedEvent(eventId = "evt-3", orderId = 1003L)
 

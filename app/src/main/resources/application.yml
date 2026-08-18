@@ -37,6 +37,9 @@ spring:
       acks: all
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 5
 
 management:
   endpoints:
@@ -51,6 +54,15 @@ app:
   kafka:
     topics:
       order-created: ${KAFKA_TOPIC_ORDER_CREATED:order-created.v1}
+      order-created-dlt: ${KAFKA_TOPIC_ORDER_CREATED_DLT:order-created.v1-dlt}
+      auto-create: ${KAFKA_TOPIC_AUTO_CREATE:true}
+      partitions: ${KAFKA_TOPIC_PARTITIONS:3}
+      replicas: ${KAFKA_TOPIC_REPLICAS:1}
+    retry:
+      initial-interval-ms: ${KAFKA_RETRY_INITIAL_INTERVAL_MS:1000}
+      multiplier: ${KAFKA_RETRY_MULTIPLIER:2.0}
+      max-interval-ms: ${KAFKA_RETRY_MAX_INTERVAL_MS:10000}
+      max-elapsed-time-ms: ${KAFKA_RETRY_MAX_ELAPSED_TIME_MS:120000}
     metrics:
       log-every: ${KAFKA_LOG_EVERY:1000}
 
