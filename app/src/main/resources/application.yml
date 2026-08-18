@@ -18,12 +18,6 @@ spring:
   flyway:
     locations: ${SPRING_FLYWAY_LOCATIONS:classpath:db/migration/h2}
 
-  data:
-    redis:
-      host: ${REDIS_HOST:localhost}
-      port: ${REDIS_PORT:6379}
-      timeout: ${REDIS_TIMEOUT:2s}
-
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     consumer:
@@ -67,7 +61,5 @@ app:
       log-every: ${KAFKA_LOG_EVERY:1000}
 
 infra:
-  redis-host: ${REDIS_HOST:localhost}
-  redis-port: ${REDIS_PORT:6379}
   kafka-bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
   consumer-group: ${KAFKA_CONSUMER_GROUP:order-settlement-group}

@@ -18,9 +18,7 @@ class InfraPropertiesLoader(
 
     override fun run(args: ApplicationArguments) {
         logger.info(
-            "infra.config.loaded redisHost={} redisPort={} kafkaBootstrapServers={} consumerGroup={} serverPort={}",
-            infraProperties.redisHost,
-            infraProperties.redisPort,
+            "infra.config.loaded kafkaBootstrapServers={} consumerGroup={} serverPort={}",
             infraProperties.kafkaBootstrapServers,
             infraProperties.consumerGroup,
             environment.getProperty("server.port") ?: "8080",
